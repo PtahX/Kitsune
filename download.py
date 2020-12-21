@@ -24,7 +24,7 @@ def uniquify(path):
     counter = 1
 
     while exists(path):
-        path = filename + " (" + str(counter) + ")" + extension
+        path = filename + "_" + str(counter) + extension
         counter += 1
 
     return basename(path)
@@ -70,8 +70,8 @@ def download_file(ddir, url, name = None, **kwargs):
             with open(join(ddir, temp_name), 'wb+') as file:
                 shutil.copyfileobj(r.raw, file)
                 # filename guessing
-                # the standard mime library is shit
-                extension = mimetypes.guess_extension(r.headers['content-type'], strict=False) if r.headers.get('content-type') else None
+                mimetype, _ = cgi.parse_header(r.headers['content-type'])
+                extension = mimetypes.guess_extension(mimetype, strict=False) if r.headers.get('content-type') else None
                 extension = extension or '.txt'
                 filename = name or r.headers.get('x-amz-meta-original-filename')
                 if filename is None:

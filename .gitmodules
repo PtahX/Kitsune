@@ -1,0 +1,3 @@
+[submodule "PixivUtil2"]
+	path = PixivUtil2
+	url = https://github.com/OpenYiff/PixivUtil2

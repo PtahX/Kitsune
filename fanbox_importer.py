@@ -1,8 +1,11 @@
+import sys
+sys.path.append('./PixivUtil2')
+
 import requests
 import datetime
 import config
 import json
-import sys
+
 from PixivUtil2.PixivModelFanbox import FanboxArtist, FanboxPost
 from proxy import get_proxy
 from database import pool
@@ -17,7 +20,7 @@ def import_posts(key, url = 'https://api.fanbox.cc/post.listSupporting?limit=50'
         cookies={ 'FANBOXSESSID': key },
         headers={ 'origin': 'https://fanbox.cc' },
         proxies=get_proxy()
-    )
+    ).json()
 
     for post in scraper_data['body']['items']:
         parsed_post = FanboxPost(post['id'], None, post)
@@ -64,14 +67,18 @@ def import_posts(key, url = 'https://api.fanbox.cc/post.listSupporting?limit=50'
                 if i == 0:
                     filename, _ = download_file(
                         join(config.download_path, file_directory),
-                        parsed_post.embeddedFiles[i]
+                        parsed_post.embeddedFiles[i],
+                        cookies={ 'FANBOXSESSID': key },
+                        headers={ 'origin': 'https://fanbox.cc' }
                     )
                     post_model['file']['name'] = filename
                     post_model['file']['path'] = f'/{file_directory}/{filename}'
                 else:
                     filename, _ = download_file(
                         join(config.download_path, attachments_directory),
-                        parsed_post.embeddedFiles[i]
+                        parsed_post.embeddedFiles[i],
+                        cookies={ 'FANBOXSESSID': key },
+                        headers={ 'origin': 'https://fanbox.cc' }
                     )
                     post_model['attachments'].append({
                         'name': filename,

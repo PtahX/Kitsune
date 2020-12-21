@@ -1,5 +1,6 @@
 from flask import Flask, request
 import patreon_importer
+import fanbox_importer
 import threading
 app = Flask(__name__)
 
@@ -9,5 +10,8 @@ def import_api():
         return "", 401
     if request.args.get('service') == 'patreon':
         th = threading.Thread(target=patreon_importer.import_posts, args=(request.args.get('session_key'),))
+        th.start()
+    elif request.args.get('service') == 'fanbox'
+        th = threading.Thread(target=fanbox_importer.import_posts, args=(request.args.get('session_key'),))
         th.start()
     return "", 200

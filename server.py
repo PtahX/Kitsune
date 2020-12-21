@@ -11,7 +11,7 @@ def import_api():
     if request.args.get('service') == 'patreon':
         th = threading.Thread(target=patreon_importer.import_posts, args=(request.args.get('session_key'),))
         th.start()
-    elif request.args.get('service') == 'fanbox'
+    elif request.args.get('service') == 'fanbox':
         th = threading.Thread(target=fanbox_importer.import_posts, args=(request.args.get('session_key'),))
         th.start()
     return "", 200

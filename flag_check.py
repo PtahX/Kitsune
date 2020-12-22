@@ -28,3 +28,4 @@ def check_for_flags(service, user, post):
         user,
         id
     ))
+    pool.putconn(conn)

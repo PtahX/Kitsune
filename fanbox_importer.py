@@ -31,19 +31,19 @@ def import_posts(key, url = 'https://api.fanbox.cc/post.listSupporting?limit=50'
             attachments_directory = f"attachments/fanbox/{post['user']['userId']}/{post['id']}"
 
             cursor1 = conn.cursor()
-            cursor1.execute("SELECT * FROM dnp WHERE id = %s AND service = 'patreon'", (post['user']['userId'],))
+            cursor1.execute("SELECT * FROM dnp WHERE id = %s AND service = 'fanbox'", (post['user']['userId'],))
             bans = cursor1.fetchall()
             if len(bans) > 0:
                 continue
             
             check_for_flags(
-                'patreon',
+                'fanbox',
                 post['user']['userId'],
                 post['id']
             )
 
             cursor2 = conn.cursor()
-            cursor2.execute("SELECT * FROM booru_posts WHERE id = %s AND service = 'patreon'", (post['id'],))
+            cursor2.execute("SELECT * FROM booru_posts WHERE id = %s AND service = 'fanbox'", (post['id'],))
             existing_posts = cursor2.fetchall()
             if len(existing_posts) > 0:
                 continue

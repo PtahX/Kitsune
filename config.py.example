@@ -1,4 +1,4 @@
-download_path = 'C:\\Users\\Biscuit\\GitHub\\Kitsune\\'
+download_path = '/storage'
 
 # database info
 database_host = 'localhost'

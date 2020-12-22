@@ -5,7 +5,7 @@ import subscribestar_importer
 import threading
 app = Flask(__name__)
 
-@app.route('/api/import')
+@app.route('/api/import', methods=['POST'])
 def import_api():
     if not request.args.get('session_key'):
         return "", 401

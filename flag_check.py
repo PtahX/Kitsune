@@ -1,9 +1,16 @@
-from database import pool
 from shutil import rmtree
 from os.path import join
+from psycopg2.extras import RealDictCursor
+import psycopg2
 import config
 def check_for_flags(service, user, post):
-    conn = pool.getconn()
+    conn = psycopg2.connect(
+        host = config.database_host,
+        dbname = config.database_dbname,
+        user = config.database_user,
+        password = config.database_password,
+        cursor_factory = RealDictCursor
+    )
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM booru_flags WHERE service = %s AND "user" = %s AND id = %s', (service, user, post))
@@ -28,4 +35,4 @@ def check_for_flags(service, user, post):
         user,
         id
     ))
-    pool.putconn(conn)
+    conn.close()

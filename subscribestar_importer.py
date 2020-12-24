@@ -3,7 +3,6 @@ import psycopg2
 import datetime
 import config
 import json
-from database import pool
 from gallery_dl import job
 from gallery_dl import config as dlconfig
 from gallery_dl.extractor.message import Message

@@ -11,7 +11,6 @@ from urllib.parse import urlparse
 from os.path import join, splitext
 from download import download_file, DownloaderException
 from gallery_dl import text
-from database import pool
 from flag_check import check_for_flags
 from proxy import get_proxy
 

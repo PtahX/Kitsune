@@ -1,19 +1,26 @@
 import sys
 sys.path.append('./PixivUtil2')
 
+import psycopg2
 import requests
 import datetime
 import config
 import json
 
+from psycopg2.extras import RealDictCursor
 from PixivUtil2.PixivModelFanbox import FanboxArtist, FanboxPost
 from proxy import get_proxy
-from database import pool
 from download import download_file, DownloaderException
 from flag_check import check_for_flags
 from os.path import join
 def import_posts(key, url = 'https://api.fanbox.cc/post.listSupporting?limit=50'):
-    conn = pool.getconn()
+    conn = psycopg2.connect(
+        host = config.database_host,
+        dbname = config.database_dbname,
+        user = config.database_user,
+        password = config.database_password,
+        cursor_factory = RealDictCursor
+    )
 
     scraper_data = requests.get(
         url,
@@ -103,7 +110,7 @@ def import_posts(key, url = 'https://api.fanbox.cc/post.listSupporting?limit=50'
         except DownloaderException:
             continue
     
-    pool.putconn(conn)
+    conn.close()
     if scraper_data['body'].get('nextUrl'):
         import_posts(key, scraper_data['body']['nextUrl'])
 

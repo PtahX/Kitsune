@@ -1,10 +1,12 @@
 import cloudscraper
+import psycopg2
 import datetime
 import config
 import time
 import uuid
 import json
 import sys
+from psycopg2.extras import RealDictCursor
 from urllib.parse import urlparse
 from os.path import join, splitext
 from download import download_file, DownloaderException
@@ -64,7 +66,13 @@ initial_api = 'https://www.patreon.com/api/stream' + '?include=' + ','.join([
 ]) + '&json-api-use-default-includes=false' + '&json-api-version=1.0'
 
 def import_posts(key, url = initial_api):
-    conn = pool.getconn()
+    conn = psycopg2.connect(
+        host = config.database_host,
+        dbname = config.database_dbname,
+        user = config.database_user,
+        password = config.database_password,
+        cursor_factory = RealDictCursor
+    )
 
     scraper = cloudscraper.create_scraper()
     scraper_data = scraper.get(url, cookies = { 'session_id': key }, proxies=get_proxy()).json()
@@ -194,7 +202,7 @@ def import_posts(key, url = initial_api):
         except DownloaderException:
             continue
 
-    pool.putconn(conn)
+    conn.close()
     if scraper_data['links'].get('next'):
         import_posts(key, 'https://' + scraper_data['links']['next'])
 

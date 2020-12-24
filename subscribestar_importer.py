@@ -1,4 +1,5 @@
 import sys
+import psycopg2
 import datetime
 import config
 import json
@@ -6,6 +7,7 @@ from database import pool
 from gallery_dl import job
 from gallery_dl import config as dlconfig
 from gallery_dl.extractor.message import Message
+from psycopg2.extras import RealDictCursor
 from download import download_file, DownloaderException
 from flag_check import check_for_flags
 from proxy import get_proxy
@@ -32,7 +34,13 @@ def strip_tags(html):
     return s.get_data()
 
 def import_posts(key):
-    conn = pool.getconn()
+    conn = psycopg2.connect(
+        host = config.database_host,
+        dbname = config.database_dbname,
+        user = config.database_user,
+        password = config.database_password,
+        cursor_factory = RealDictCursor
+    )
 
     dlconfig.set(('extractor', 'subscribestar'), "cookies", {
         "auth_token": key
@@ -121,7 +129,7 @@ def import_posts(key):
         except DownloaderException:
             continue
     
-    pool.putconn(conn)
+    conn.close()
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

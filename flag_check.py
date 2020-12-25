@@ -26,13 +26,13 @@ def check_for_flags(service, user, post):
         'attachments',
         '' if service == 'patreon' else service,
         user,
-        id
+        post
     ))
     rmtree(join(
         config.download_path,
         'files',
         '' if service == 'patreon' else service,
         user,
-        id
+        post
     ))
     conn.close()

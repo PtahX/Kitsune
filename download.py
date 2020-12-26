@@ -96,7 +96,7 @@ def download_file(ddir, url, name = None, **kwargs):
                     except:
                         raise DownloaderException('Image integrity check failed')
                 file.close()
-                rename(join(ddir, temp_name), join(ddir, filename)))
+                rename(join(ddir, temp_name), join(ddir, filename))
                 return filename, r
         except requests.HTTPError as e:
             raise e

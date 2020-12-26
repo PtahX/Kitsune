@@ -23,7 +23,7 @@ def uniquify(path):
     filename, extension = splitext(path)
     counter = 1
 
-    while exists(path):
+    while exists(path.encode('utf-8')):
         path = filename + "_" + str(counter) + extension
         counter += 1
 

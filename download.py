@@ -23,7 +23,7 @@ def uniquify(path):
     filename, extension = splitext(path)
     counter = 1
 
-    while exists(path.encode('utf-8')):
+    while exists(path):
         path = filename + "_" + str(counter) + extension
         counter += 1
 
@@ -96,7 +96,7 @@ def download_file(ddir, url, name = None, **kwargs):
                     except:
                         raise DownloaderException('Image integrity check failed')
                 file.close()
-                rename(join(ddir, u'' + temp_name), join(ddir, filename.encode('utf-8')))
+                rename(join(ddir, temp_name), join(ddir, filename)))
                 return filename, r
         except requests.HTTPError as e:
             raise e

@@ -41,6 +41,7 @@ def import_posts(key):
         cursor_factory = RealDictCursor
     )
 
+    dlconfig.set(('output'), "mode", "null")
     dlconfig.set(('extractor', 'subscribestar'), "cookies", {
         "auth_token": key
     })

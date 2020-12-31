@@ -27,12 +27,12 @@ def check_for_flags(service, user, post):
         '' if service == 'patreon' else service,
         user,
         post
-    ))
+    ), ignore_errors=True)
     rmtree(join(
         config.download_path,
         'files',
         '' if service == 'patreon' else service,
         user,
         post
-    ))
+    ), ignore_errors=True)
     conn.close()

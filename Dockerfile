@@ -11,4 +11,7 @@ RUN pip3 install -r requirements.txt
 
 COPY ./nginx.conf /etc/nginx/sites-enabled/default
 
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
 CMD service nginx start && uwsgi -s /tmp/kemono.sock --chmod-socket=666 --manage-script-name --mount /=server:app --processes 1 --threads 2 --master --listen 40000 --disable-logging --log-5xx
